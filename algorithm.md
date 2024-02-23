@@ -73,3 +73,21 @@ int process(int[] arr, int L, int R) {
     return std::max(letMax, rightMax)
 }
 ```
+
+**master公式：`T(N) = a * T(N/b) + O(N^d)`**
+* `T(N)`: 母问题有N个数据
+* `a`: 子问题被调用多少次
+* `T(N/b)` : 子问题的规模**都是**N/b
+* `O(N^d)`:除了子问题其他的程序的时间复杂度
+  
+`arr[L..R]`范围上的最大值解法,带入master公式：`T(N) = 2 * T(N/2) + O(1)`  
+1） log(a,b) > d -> 复杂度：O(N^log(b,a))  
+2） log(a,b) = d -> 复杂度：O(N^d * logN)  
+3） log(a,b) < d -> 复杂度：O(N^d)  
+
+## 归并排序
+```c++
+int process(int[] arr, int L, int R) {
+
+}
+```
