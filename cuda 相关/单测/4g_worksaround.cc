@@ -64,8 +64,8 @@ xpu_wait();
 XPU_CHECK(api::copy<int8_t>(ctx, reinterpret_cast<int8_t*>(deviceArray4), reinterpret_cast<int8_t*>(deviceArray + half_size), half_size *  4));
 xpu_wait();
 
-loat* deviceArray5 = nullptr;
-loat* deviceArray6 = nullptr;
+float* deviceArray5 = nullptr;
+float* deviceArray6 = nullptr;
 CUDA_CHECK(cudaMalloc(&deviceArray5, half_size * sizeof(float)));
 CUDA_CHECK(cudaMalloc(&deviceArray6, half_size * sizeof(float)));
 
