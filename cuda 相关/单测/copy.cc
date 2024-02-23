@@ -65,6 +65,35 @@ void d2h_cuda(long long  size) {
 
 }
 
+void copy_twice() {
+    size_t total_size = 4 * 1024 * 1024 * 1024; // 4GB
+    float *host_ptr = new float[total_size];
+
+    // 分成两半
+    size_t half_size = total_size / 2;
+    float *host_ptr_half1 = host_ptr;
+    float *host_ptr_half2 = host_ptr + half_size;
+
+    // 在CUDA设备上分配4GB的内存
+    float *device_ptr_half1, *device_ptr_half2;
+    CUDA_CHECK(cudaMalloc(&device_ptr_half1, half_size * sizeof(float)));
+    CUDA_CHECK(cudaMalloc(&device_ptr_half2, half_size * sizeof(float)));
+
+    // 将主机内存的两部分分别复制到CUDA设备内存
+    CUDA_CHECK(cudaMemcpy(device_ptr_half1, host_ptr_half1, half_size * sizeof(float), cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(device_ptr_half2, host_ptr_half2, half_size * sizeof(float), cudaMemcpyHostToDevice));
+
+    // 从CUDA设备内存分两次复制回主机内存
+    CUDA_CHECK(cudaMemcpy(host_ptr_half1, device_ptr_half1, half_size * sizeof(float), cudaMemcpyDeviceToHost));
+    CUDA_CHECK(cudaMemcpy(host_ptr_half2, device_ptr_half2, half_size * sizeof(float), cudaMemcpyDeviceToHost));
+
+    // 释放主机内存和CUDA设备内存
+    delete[] host_ptr;
+    CUDA_CHECK(cudaFree(device_ptr_half1));
+    CUDA_CHECK(cudaFree(device_ptr_half2));
+
+}
+
 
 int main() {
    // std::cout << "start 4M copy"<< std::endl;
